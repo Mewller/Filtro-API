@@ -44,7 +44,7 @@ while True:
         while True: #solicita Lista de IDS
             if page != 100:
                 numero_solicitacao = numero_solicitacao + 1
-                lista = requests.get(f'https://api.auvo.com.br/v2/tasks/?paramFilter={data}&page={page}&pageSize={pageSize}&order={order}&selectfields={selectfields}?starDate=2023-06-06T00:00:00', headers=headers)
+                lista = requests.get(f'https://api.auvo.com.br/v2/tasks/?paramFilter={data}&page={page}&pageSize={pageSize}&order={order}&selectfields={selectfields}', headers=headers)
                 if numero_solicitacao == 100:
                     break
                 page = page + 1 
