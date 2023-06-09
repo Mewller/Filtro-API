@@ -3,15 +3,19 @@ import json
 from datetime import datetime
 import PySimpleGUI as sg
 import os
-from TOKEN import apikey, token
+
+
+apikey = ''
+token = ''
 
 layout = [
     [sg.Text('Data de Início:'), sg.Input(key='-DATA_INICIO-', enable_events=True), sg.CalendarButton('Selecionar', target='-DATA_INICIO-', format='%Y-%m-%d')],
     [sg.Text('  Data Final:   '), sg.Input(key='-DATA_FINAL-', enable_events=True), sg.CalendarButton('Selecionar', target='-DATA_FINAL-', format='%Y-%m-%d')],
     [sg.Text('Onde Salvar? '), sg.Input(key='-PASTA_DESTINO-', enable_events=True), sg.FolderBrowse('Selecionar')],
     [sg.Output(size=(68, 15))],
-    [sg.Button('Baixar'), sg.Button('Sair')]
+    [sg.Button('Baixar', button_color=('white', 'Darkblue'), image_size=(50, 25), border_width=5, key='-BAIXAR-'), sg.Text('                                                                                              '),sg.Button('Sair', button_color=('Darkred'))]
 ]
+sg.set_global_icon('icon.ico')
 janela = sg.Window('Filtro', layout)
 
 def baixar_anexos(data_inicio, data_final, pasta_destino):
@@ -42,7 +46,7 @@ def baixar_anexos(data_inicio, data_final, pasta_destino):
                 else:
                     break
                 if numero_ids == 0:                    
-                    print("todas as tarefas foram vistas :)")
+                    print('')
                 else:
                     print(f'esse é o numero de IDs {numero_ids}')
                     while True:
@@ -83,16 +87,19 @@ def baixar_anexos(data_inicio, data_final, pasta_destino):
                 janela['-ELEMENTO_DA_INTERFACE-'].update('Novo valor')
                 page = page + 1
                 break      
-        print("todas as tarefas foram vistas :)")
+        print("todas as tarefas foram vistas 😀")
     except Exception as e:
         print(f"Erro ao baixar os anexos: {str(e)}")
+
 while True:
     eventos, valores = janela.read()
     if eventos == sg.WINDOW_CLOSED or eventos == 'Sair':
         break
-    elif eventos == 'Baixar':
+    elif eventos == '-BAIXAR-':
+        janela['-BAIXAR-'].update(disabled=True)  # Desabilita o botão 'Baixar'
         data_inicio = valores['-DATA_INICIO-']
         data_final = valores['-DATA_FINAL-']
         pasta_destino = valores['-PASTA_DESTINO-']
         baixar_anexos(data_inicio, data_final, pasta_destino)
+        janela['-BAIXAR-'].update(disabled=False)  # Habilita o botão 'Baixar'
 janela.close()
